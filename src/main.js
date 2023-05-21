@@ -25,7 +25,7 @@ bot.command('pict', sendGenImage)
 async function sendGenImage(ctx) {
     const tmp = ctx.message.text.substring(6, ctx.message.text.length);
     try {
-        await ctx.reply(code('Сообщение принял. Жду ответ от сервера...'))
+        await ctx.reply('Сообщение принял. Жду ответ от сервера...')
         const ker = await generateIamge(tmp)
 
         const mediaGroup = [
@@ -53,6 +53,7 @@ async function sendGenImage(ctx) {
 
         await ctx.telegram.sendMediaGroup(ctx.message.chat.id, mediaGroup)
     } catch (e) {
+        await ctx.reply("Повторите запрос позже!")
         console.log(`Error while image message`, e.message)
     }
 }
@@ -60,7 +61,7 @@ async function sendGenImage(ctx) {
 bot.on(message('voice'), async (ctx) => {
     // если сессия не определилась, создаем новую
 try {
-    await ctx.reply(code('Сообщение принял. Жду ответ от сервера...'))
+    await ctx.reply('Сообщение принял. Жду ответ от сервера...')
     const link = await ctx.telegram.getFileLink(ctx.message.voice.file_id)
     const userId = String(ctx.message.from.id)
     const oggPath = await ogg.create(link.href, userId)
@@ -70,22 +71,24 @@ try {
     await ctx.reply(code(`Ваш запрос: ${text}`))
     await chatGen(ctx, text)
 } catch (e) {
+    await ctx.reply("Повторите запрос позже!")
     console.log(`Error while voice message`, e.message)
 }
 })
 
 bot.on(message('text'), async (ctx) => {
     try {
-        await ctx.reply(code('Сообщение принял. Жду ответ от сервера...'))
+        await ctx.reply('Сообщение принял. Жду ответ от сервера...')
         await chatGen(ctx, ctx.message.text)
     } catch (e){
+        await ctx.reply("Повторите запрос позже!")
             console.log(`Error while image message`, e.message)
         }
 })
 
 bot.on(message('photo'), async (ctx) => {
     try {
-        await ctx.reply(code('принял. Жду ответ от сервера...'));
+        await ctx.reply('принял. Жду ответ от сервера...');
         const d = ctx.message.photo;
         const dis = ctx.message.caption
         console.log(dis)
@@ -95,6 +98,7 @@ bot.on(message('photo'), async (ctx) => {
         await ctx.reply(code(res))
         await chatGen(ctx, (dis + "\n" + res))
     } catch (error) {
+        await ctx.reply("Повторите запрос позже!")
         // Обработка ошибок
         console.error(error);
     }

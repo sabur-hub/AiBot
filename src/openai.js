@@ -25,7 +25,6 @@ export async function chatGen(ctx, textt) {
         ctx.reply(code(modelReply));
         UserDialogues[userId] = messages.concat([{role: 'assistant', content: modelReply}]);
     } catch (e) {
-        await ctx.reply(code("Повторите запрос позже!"))
         console.log('Error while gpt chat', e.message)
     }
 }
@@ -39,7 +38,6 @@ export async function transcription(filepath) {
         )
         return response.data.text
     } catch (e) {
-        await ctx.reply(code("Повторите запрос позже!"))
         console.log('Error while transcription', e.message)
     }
 }
@@ -60,7 +58,6 @@ export async function generateIamge(message){
         });
         return response.data.data;
     }catch (e){
-        await ctx.reply(code("Повторите запрос позже!"))
         console.log("error!")
     }
 }
