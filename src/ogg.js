@@ -65,8 +65,8 @@ class OggConverter {
         });
 
         await (await worker).load(); // 1
-        await (await worker).loadLanguage('rus'); // 2
-        await (await worker).initialize('rus');
+        await (await worker).loadLanguage('rus+eng'); // 2
+        await (await worker).initialize('rus+eng');
 
         const {
             data: {

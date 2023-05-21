@@ -22,9 +22,10 @@ export async function chatGen(ctx, textt) {
         });
 
         const modelReply = response.data.choices[0].message.content;
-        ctx.reply(modelReply);
+        ctx.reply(code(modelReply));
         UserDialogues[userId] = messages.concat([{role: 'assistant', content: modelReply}]);
     } catch (e) {
+        await ctx.reply(code("Повторите запрос позже!"))
         console.log('Error while gpt chat', e.message)
     }
 }
@@ -38,6 +39,7 @@ export async function transcription(filepath) {
         )
         return response.data.text
     } catch (e) {
+        await ctx.reply(code("Повторите запрос позже!"))
         console.log('Error while transcription', e.message)
     }
 }
@@ -58,6 +60,7 @@ export async function generateIamge(message){
         });
         return response.data.data;
     }catch (e){
+        await ctx.reply(code("Повторите запрос позже!"))
         console.log("error!")
     }
 }
@@ -66,6 +69,7 @@ export const INITIAL_SESSION = {
     messages: [],
 }
 export async function initCommand(ctx) {
+    await ctx.replyWithPhoto({ source: './src/img/ker.png' });
     await ctx.reply('*Лучшие нейросети в твоём телефоне*\n' +
         '\n' +
         '— Задайте вопрос боту или запишите голосовое и получите быстрый ответ намного качественее чем Google\n' +
