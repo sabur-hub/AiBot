@@ -4,11 +4,14 @@ import {code, link} from 'telegraf/format'
 import config from 'config'
 import { ogg } from './ogg.js'
 import { removeFile } from './utils.js'
+import {chatMidGen} from './apiMed.js'
+import {kerDown} from "./imgdownloader.js";
+import {chatMidGen2} from './apiMedGiveImg.js'
 import { initCommand, newChatKer, chatGen, transcription, generateIamge, INITIAL_SESSION } from './openai.js'
 import path, {dirname, resolve} from "path";
 import {fileURLToPath} from "url";
-import request from "axios";
 import fs, {createWriteStream} from "fs";
+import axios from "axios";
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const bot = new Telegraf(config.get('TELEGRAM_TOKEN'))
@@ -21,7 +24,23 @@ bot.use(session())
 bot.command('new', newChatKer)
 bot.command('start', initCommand)
 bot.command('pict', sendGenImage)
+bot.command('mid', sendMid)
 
+async function sendMid(ctx){
+    const tmp = ctx.message.text.substring(5, ctx.message.text.length)
+
+    //let msgId = await chatMidGen(ctx, tmp);
+    let msgId = "";
+
+    await ctx.reply("Запрос отправлен!")
+    console.log(msgId)
+    let bl = true;
+    let imageUr = await chatMidGen2(ctx, msgId);
+    await kerDown(imageUr)
+
+    await ctx.replyWithDocument({ source: "./file.png" });
+
+}
 async function sendGenImage(ctx) {
     const tmp = ctx.message.text.substring(6, ctx.message.text.length);
     try {
