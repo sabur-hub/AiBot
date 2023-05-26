@@ -1,24 +1,14 @@
-import fs, {createWriteStream} from "fs";
+import fs from "fs";
 import axios from "axios";
 
-export function kerDown(fileUrl) {
-    const fileName = 'file.png';
+export async function kerDown(fileUrl, msgId) {
+    const fileName = `${msgId}.png`;
 
-    axios({
-        method: 'get',
-        url: fileUrl,
-        responseType: 'stream',
-    })
-        .then((response) => {
-            const file = fs.createWriteStream(fileName);
-            response.data.pipe(file);
-
-            file.on('finish', () => {
-                file.close();
-                console.log('Файл успешно скачан.');
-            });
-        })
-        .catch((error) => {
-            console.error(`Ошибка загрузки файла: ${error}`);
-        });
+    try {
+        const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
+        await fs.writeFileSync(fileName, response.data);
+        console.log('Файл успешно скачан.');
+    } catch (error) {
+        console.error(`Ошибка загрузки файла: ${error}`);
+    }
 }

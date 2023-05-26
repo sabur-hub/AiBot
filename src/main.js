@@ -7,6 +7,8 @@ import { removeFile } from './utils.js'
 import {chatMidGen} from './apiMed.js'
 import {kerDown} from "./imgdownloader.js";
 import {chatMidGen2} from './apiMedGiveImg.js'
+import {buttons} from './buttonsMid.js'
+import {buttonGetId} from './getButtonId.js'
 import { initCommand, newChatKer, chatGen, transcription, generateIamge, INITIAL_SESSION } from './openai.js'
 import path, {dirname, resolve} from "path";
 import {fileURLToPath} from "url";
@@ -29,17 +31,22 @@ bot.command('mid', sendMid)
 async function sendMid(ctx){
     const tmp = ctx.message.text.substring(5, ctx.message.text.length)
 
-    //let msgId = await chatMidGen(ctx, tmp);
-    let msgId = "";
+    let msgId = await chatMidGen(ctx, tmp);
 
-    await ctx.reply("Запрос отправлен!")
-    console.log(msgId)
-    let bl = true;
+    await ctx.reply("Запрос отправлен!");
+    console.log(msgId);
+
     let imageUr = await chatMidGen2(ctx, msgId);
-    await kerDown(imageUr)
+    await kerDown(imageUr, msgId);
 
-    await ctx.replyWithDocument({ source: "./file.png" });
+    await ctx.replyWithPhoto({ source: `${msgId}.png` });
+    await ctx.reply(tmp);
 
+    let buttonId = await buttonGetId(ctx, msgId);
+    let U1 = await buttons(ctx, "U1", buttonId);
+    console.log(U1)
+    await kerDown(U1, `${buttonId}U1`);
+    await ctx.replyWithDocument({ source: `${buttonId}U1.png` });
 }
 async function sendGenImage(ctx) {
     const tmp = ctx.message.text.substring(6, ctx.message.text.length);

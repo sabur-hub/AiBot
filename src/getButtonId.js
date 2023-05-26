@@ -1,9 +1,8 @@
 import axios from 'axios'
 
-export async function chatMidGen2(ctx, msgId) {
+export async function buttonGetId(ctx, msgId) {
     var data;
     let ur = `https://api.thenextleg.io/v2/message/${msgId}?expireMins=2`;
-    console.log(ur)
     //ur = 'https://api.thenextleg.io/v2/message/qzFGL8J3MB4P7yDJhW5I?expireMins=2';
 
     var config = {
@@ -20,16 +19,11 @@ export async function chatMidGen2(ctx, msgId) {
     let bl = true;
     let last = 0;
     let neww;
-    while(bl){
         await axios(config)
             .then(function (response) {
                 neww = response.data.progress;
-                if(last != neww){
-                    console.log(neww)
-                }
-                last = neww;
-                if(last == 100){
-                    img = response.data.response.imageUrl;
+                if(neww == 100){
+                    img = response.data.response.buttonMessageId;
                     ctx.reply("Finished!");
                     bl = false
                 }
@@ -37,7 +31,6 @@ export async function chatMidGen2(ctx, msgId) {
             .catch(function (error) {
                 console.log("errorAxios");
             });
-    }
 
     return img;
 }

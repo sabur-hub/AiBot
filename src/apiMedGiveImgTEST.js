@@ -1,7 +1,7 @@
 import axios from 'axios'
 
     var dataa;
-    let ur = 'https://api.thenextleg.io/v2/message/qzFGL8J3MB4P7yDJhW5I?expireMins=2';
+    let ur = 'https://api.thenextleg.io/v2/message/Ql3pEu6UwPgOAa2DgjRW?expireMins=2';
 
     var configg = {
         method: 'get',
